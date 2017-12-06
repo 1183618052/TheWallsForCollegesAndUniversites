@@ -10,6 +10,9 @@ $(document).ready(function(){
     $('#Regist').click(function(){
         $('#RegistModal').modal('show');
     });
+    $('#RegistModal').on('hidden.bs.modal', function (e) {
+        $('#RegistModal input').val('');
+    });
     // 登陆验证
     $('#loginForm')
         .bootstrapValidator({
@@ -159,4 +162,4 @@ $(document).ready(function(){
                     }
                 }, 'json');
             });
-});
+})      ;
