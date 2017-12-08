@@ -20,9 +20,10 @@ class LoginValidate extends Validate
         'password.require'   => '密码必须',
         'password.length'  => '密码不是MD5且32长度',
     ];
-    //场景
+    //场景  因为会设定不区分大小写url，所以这里统一使用小写场景
     protected $scene = [
         'regist'  =>  ['account','password'],
+        'checkaccount'=>['account']
     ];
 
 }

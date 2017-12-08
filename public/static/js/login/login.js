@@ -1,6 +1,6 @@
 // 确定JQ文件加载完毕
 $(document).ready(function(){
-    var account_min_length = 5;
+    var account_min_length = 6;
     var account_max_length = 15;
     var account_regexp = /^[a-zA-Z0-9_\-]+$/ ;
     var account_regexp_error_tip = '账号只允许为字母、数字、-以及_';
@@ -94,14 +94,15 @@ $(document).ready(function(){
                                 max: account_max_length,
                                 message: '账号长度在'+account_min_length+'到'+account_max_length+'额字符之间'
                             },
-                            /*remote: {
-                                url: 'remote.php',
-                                message: 'The username is not available'
-                            },*/
                             regexp: {
                                 regexp: account_regexp,
                                 message: account_regexp_error_tip
-                            }
+                            },
+                            remote: {
+                                type: 'POST',
+                                url: check_account_url,
+                                delay: 1000
+                            },
                         }
                     },
                     password: {

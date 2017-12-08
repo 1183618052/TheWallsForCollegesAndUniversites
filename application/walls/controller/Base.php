@@ -1,6 +1,7 @@
 <?php
 namespace app\walls\controller;
 use think\Controller;
+use think\Db;
 include APP_PATH.'/walls/const_def.php';
 /**
  * @descrption万事墙基础控制类
@@ -9,17 +10,13 @@ include APP_PATH.'/walls/const_def.php';
  */
 class Base extends Controller
 {
+    public $db;
     /**
      * 初始化加载
      */
-    public function _initialize()
+    protected function _initialize()
     {
-        //获取访问的控制类 模块、控制器、操作
-        // $this->request = Request::instance();
-        //echo "当前模块名称是" . $request->module();
-        //echo "当前控制器名称是" . $request->controller();
-        //echo "当前操作名称是" . $request->action();
-        //die;
+        $this->db = Db::instance();
         //验证是否登陆
         if ( !in_array($this->request->controller(),NO_LOGIN) ) {
             $this->checklogin();
@@ -42,4 +39,6 @@ class Base extends Controller
              $this->redirect('Login/login');
         }
     }
+
+
 }
