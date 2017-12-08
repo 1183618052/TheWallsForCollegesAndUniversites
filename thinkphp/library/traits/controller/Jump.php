@@ -145,4 +145,21 @@ trait Jump
         $isAjax = Request::instance()->isAjax();
         return $isAjax ? Config::get('default_ajax_return') : Config::get('default_return_type');
     }
+    /**
+     * 验证返回
+     * @param  boolean  $valid
+     * @param  string   message
+     * @return json
+     */
+     protected function validateReturn( $valid = false , $message = 'this value is error' ,$type = '',array $header = [])
+     {
+         $result = [
+             'valid' => $valid,
+             'message'  => $message,
+             'time' => date('Y-m-d H:i:s', Request::instance()->server('REQUEST_TIME')),
+         ];
+         $type     = $type ?: $this->getResponseType();
+         $response = Response::create($result, $type)->header($header);
+         throw new HttpResponseException($response);
+     }
 }
