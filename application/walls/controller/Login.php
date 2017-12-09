@@ -71,16 +71,11 @@ class Login extends Base
         $userId = UserModel::where($this->data)->value('id');
         //返回结果
         if ( empty( $userId ) ) {
-            $valid = true;
-
+            $this->validateReturn(true,'success');
         } else {
-            $valid = false;
-            $message = '该账号已被使用';
+            $this->validateReturn(false,'该账号已被使用');
         }
-        //暂写，后续有复用，写成公共方法
-        echo json_encode(
-            $valid ? array('valid' => $valid) : array('valid' => $valid, 'message' => $message)
-        );
+
     }
 
 }
