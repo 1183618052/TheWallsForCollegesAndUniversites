@@ -1,6 +1,6 @@
 // 确定JQ文件加载完毕
 $(document).ready(function(){
-    var account_min_length = 6;
+    var account_min_length = 5;
     var account_max_length = 15;
     var account_regexp = /^[a-zA-Z0-9_\-]+$/ ;
     var account_regexp_error_tip = '账号只允许为字母、数字、-以及_';
@@ -53,7 +53,9 @@ $(document).ready(function(){
                             min: password_min_length,
                             max: password_max_length,
                             message: '密码长度在'+password_min_length+'到'+password_max_length+'额字符之间'
-                        }
+                        },
+
+
                     }
                 }
             }
@@ -86,29 +88,55 @@ $(document).ready(function(){
                     account: {
                         message: 'The account is not valid',
                         validators: {
-                            notEmpty: {
-                                message: '账号不能为空'
-                            },
-                            stringLength: {
-                                min: account_min_length,
-                                max: account_max_length,
-                                message: '账号长度在'+account_min_length+'到'+account_max_length+'额字符之间'
-                            },
-                            regexp: {
-                                regexp: account_regexp,
-                                message: account_regexp_error_tip
-                            },
-                            remote: {
-                                type: 'POST',
-                                url: check_account_url,
-                                delay: 1000
-                            },
+                            callback: {
+                                callback: function(value, validator) {
+                                // Check the password strength
+                                    if ( account_min_length > value.length || value.length > account_max_length ) {
+                                        return {
+                                            valid: false,
+                                            message: '账号长度在'+account_min_length+'到'+account_max_length+'额字符之间'
+                                        }
+                                    }
+
+                                    if ( !account_regexp.test(value) ) {
+                                        return {
+                                            valid: false,
+                                            message: account_regexp_error_tip
+                                        }
+                                    }
+                                    var isTrue = true; //$.ajax里不能直接return,因为作用域只是success
+                                    $.ajax({
+                                        url:check_account_url,
+                                        type: 'post',
+                                        async:false,//一定要是同步的，不然下面拿不到赋值
+                                        data:{account:value},
+                                        success:function ( result ) {
+                                            console.log(result.valid);
+                                            console.log(result);
+                                            if ( result.valid ) {
+                                                isTrue = result.valid;
+                                            } else {
+                                                isTrue = {
+                                                    valid: result.valid,
+                                                    message: result.message
+                                                }
+                                            }
+                                        }
+                                    });
+                                    console.log(isTrue)
+                                    return isTrue;
+                                }
+                            }
                         }
                     },
                     password: {
                         validators: {
                             notEmpty: {
                                 message: '密码不能为空'
+                            },
+                            different: {
+                                field: 'account',
+                                message: '密码不能和账号一致'
                             },
                             stringLength: {
                                 min: password_min_length,
