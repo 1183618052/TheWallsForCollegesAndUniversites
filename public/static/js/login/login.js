@@ -11,7 +11,9 @@ $(document).ready(function(){
         $('#RegistModal').modal('show');
     });
     $('#RegistModal').on('hidden.bs.modal', function (e) {
-        $('#RegistModal input').val('');
+        $('#registForm').bootstrapValidator('resetForm', true);//重置验证信息和表单数据
+        $('.alert').alert('close');//关闭信息提示框
+
     });
     // 登陆验证
     $('#loginForm')
@@ -84,12 +86,13 @@ $(document).ready(function(){
                     invalid: 'glyphicon glyphicon-remove',
                     validating: 'glyphicon glyphicon-refresh'
                 },
+                excluded: [':disabled'],
                 fields: {
                     account: {
                         message: 'The account is not valid',
                         validators: {
                             callback: {
-                                callback: function(value, validator) {
+                                callback: function(value, validator) {//因为这里要用ajax验证账号是否唯一，又不想反复提交，所以使用callback
                                 // Check the password strength
                                     if ( account_min_length > value.length || value.length > account_max_length ) {
                                         return {
@@ -172,18 +175,22 @@ $(document).ready(function(){
                 // Use Ajax to submit form data
                 $.post($form.attr('action'), $form.serialize(), function(result) {
                     if ( result.code !== 0 ) {
+                        //设置提示框
                         var alert_str = '<div class="alert alert-danger alert-dismissible text-center fade in" style="word-wrap:break-word; margin-top:2rem;"  role="alert">'+
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
                             '<strong >'+result.msg+'</strong>'+
                         '</div>';
+                        //添加提示框
                         $('#RegistModal .modal-footer').append(alert_str);
                     } else {
+                        //提交按钮禁止使用
                         $('#RegistModal button[type="submit"]').attr('disabled','disabled')
                         var alert_str = '<div class="alert alert-success alert-dismissible text-center fade in" style="word-wrap:break-word; margin-top:2rem;"  role="alert">'+
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
                             '<strong >'+result.msg+'</strong>'+
                         '</div>';
                         $('#RegistModal .modal-footer').append(alert_str);
+                        //关闭弹层
                         $('.alert').on('closed.bs.alert', function () {
                             $('#RegistModal').modal('hide');
                         });
