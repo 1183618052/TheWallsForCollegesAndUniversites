@@ -47,12 +47,20 @@ class Login extends Base
         //获取随机盐
         $salt  = createSalt(8);
         //拼装数据
-        $_POST['password'] = md5($salt.$data['password']);
+        $_POST['password'] = md5($salt.$this->data['password']);
         $_POST['salt'] = $salt;
+        //检查账号是否唯一
+        $account['account'] = $this->data['account'];
+        $userId = UserModel::accountExist($account);
+        //返回结果
+        if ( !empty( $userId ) ) {
+            $this->result(NULL,1,'该账号已被使用');
+        }
         //存入数据库
         $userDb = new UserModel($_POST);
-        $userDb->allowField(true)->save();//过滤非表单字段
-        $userId = $userDb->id;
+        $abc =  $userDb->allowField(true)->save();//过滤非表单字段
+        $userId = $userDb->id;//这么用要求该表有且只有一个主键，否则不生效。
+        //存入redis
         //返回结果
         if ( empty( $userId ) ) {
             $this->result(NULL,1,'创建失败');
@@ -61,14 +69,14 @@ class Login extends Base
         }
     }
     /**
-     * 检查账号是否存在
+     * ajax检查账号是否存在
      * @param  string  account
      * @return josn
      */
     public function checkAccount()
     {
         //获取该账号的id
-        $userId = UserModel::where($this->data)->value('id');
+        $userId = UserModel::accountExist($this->data);
         //返回结果
         if ( empty( $userId ) ) {
             $this->validateReturn(true,'success');

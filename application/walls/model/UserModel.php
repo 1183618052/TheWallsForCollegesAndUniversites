@@ -21,4 +21,14 @@ class UserModel extends BaseModel
         parent::initialize();
         //TODO:自定义的初始化
     }
+    /**
+     * 检查账号是否存在
+     * @param array account 账号
+     * @return boolean
+     */
+    public static function accountExist($account)
+    {
+        return UserModel::where($account)->value('id');
+
+    }
 }

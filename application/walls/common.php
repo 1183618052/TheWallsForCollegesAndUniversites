@@ -20,5 +20,5 @@ function createSalt($length)
     $str="QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm*&^%$#@!()_+=-?><.,~`:';\\|{][}";
     $str = str_shuffle($str);
     $salt=substr($str,26,$length);
-    return salt;
+    return $salt;
 }
