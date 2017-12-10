@@ -9,5 +9,6 @@
 
  const USER_STATUS_TRUE = 1 ;//用户状态正常
  const USER_STATUS_FALSE = 2 ;//用户状态废弃
+ const USER_STATUS_FALSE = 2 ;//用户状态废弃
 
  ?>
