@@ -49,6 +49,7 @@ class Login extends Base
         //拼装数据
         $_POST['password'] = md5($salt.$this->data['password']);
         $_POST['salt'] = $salt;
+        $_POST['status'] = USER_STATUS_TRUE ;
         //检查账号是否唯一
         $account['account'] = $this->data['account'];
         $userId = UserModel::accountExist($account);

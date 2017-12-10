@@ -2,7 +2,6 @@
 namespace app\walls\controller;
 use think\Controller;
 use think\Db;
-include APP_PATH.'/walls/const_def.php';
 /**
  * @descrption万事墙基础控制类
  *
