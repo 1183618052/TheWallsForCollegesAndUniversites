@@ -3,6 +3,7 @@ namespace app\walls\controller;
 use  app\walls\controller\Base;
 use  app\walls\validate\LoginValidate;
 use  app\walls\model\UserModel;
+use  think\Cache;
 /**
  *万事墙首页控制类
  *
@@ -61,11 +62,15 @@ class Login extends Base
         $userDb = new UserModel($_POST);
         $abc =  $userDb->allowField(true)->save();//过滤非表单字段
         $userId = $userDb->id;//这么用要求该表有且只有一个主键，否则不生效。
-        //存入redis
         //返回结果
         if ( empty( $userId ) ) {
             $this->result(NULL,1,'创建失败');
         } else {
+            //存入redis
+            $redis = Cache::connect(config('cache'));
+            if ( !empty( $redis ) ) {
+                Cache::set('accountList_'.$account['account'],$_POST['password'],172800);//记录账号密码缓存
+            }
             $this->result(NULL,0,'成功');
         }
     }
