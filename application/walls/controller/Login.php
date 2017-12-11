@@ -91,5 +91,23 @@ class Login extends Base
         }
 
     }
-
+    /**
+     * 执行登陆操作
+     *
+     *
+     *
+     */
+     public function doLogin()
+     {
+         //从redis查询账号密码
+         
+            //有，对比账号密码
+                //对比
+                    //正确 刷新时效 增加登录次数、把登陆信息存入redis hash
+                    //错误 返还结果
+            //没有，从数据库查,
+                //对比
+                    //正确，存入redis、增加登录次数、把登陆信息存入redis hash
+                    //错误 返还结果
+     }
 }

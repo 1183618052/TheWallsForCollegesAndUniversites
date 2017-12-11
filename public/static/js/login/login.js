@@ -36,10 +36,6 @@ $(document).ready(function(){
                             max: account_max_length,
                             message: '账号长度在'+account_min_length+'到'+account_max_length+'额字符之间'
                         },
-                        /*remote: {
-                            url: 'remote.php',
-                            message: 'The username is not available'
-                        },*/
                         regexp: {
                             regexp: account_regexp,
                             message:account_regexp_error_tip
